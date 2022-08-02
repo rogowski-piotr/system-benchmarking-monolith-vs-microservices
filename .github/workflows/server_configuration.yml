@@ -1,4 +1,4 @@
-name: "Push-repo-to-EC2"
+name: "Server configuration"
 
 on: 
   workflow_dispatch:
@@ -9,6 +9,8 @@ on:
         default: 'warning'
       tags:
         description: 'Test scenario tags'  
+
+# on: push
 
 jobs:
   deploy:
@@ -26,3 +28,19 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ubuntu
           TARGET: /home/ubuntu
+
+      - name: Ansible configuration
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST_DNS }}
+          username: ubuntu
+          port: 22 
+          script:  |
+            sudo apt update &&\
+             sudo apt-get install -y ansible &&\
+              cd infrastructure/ansible &&\
+               ansible-playbook --connection=local provision_web_server.yml
+
+
+#TODO: DOCKER + PROMETUESZ

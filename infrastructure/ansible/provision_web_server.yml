@@ -1,7 +1,8 @@
 ---
 
 - name: Provision Web Server
-  hosts: webservers
+  hosts: localhost
+  connection: local 
   tasks:
 
   - name: Install update

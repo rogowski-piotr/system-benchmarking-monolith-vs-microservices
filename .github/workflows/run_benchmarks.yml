@@ -1,0 +1,109 @@
+name: "Launching benchmarks"
+
+on: 
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'  
+
+#on: push
+
+jobs:
+  deploy:
+    name: Performance of benchmarks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Running benchmarks for flask application in monolith version
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST_DNS }}
+          username: ubuntu
+          port: 22 
+          script:  |
+            docker rm -f $(docker ps -aq); docker system prune --all -f &&\
+             docker-compose -f docker-compose-flask-monolith.yml up --build -d &&\
+              echo Here will be the launch of the tests 
+               echo Here will be the Data Collection 
+                docker rm -f $(docker ps -aq) && docker system prune --all -f 
+                 echo Benchmark for monolith version of flask application completed, system cleared
+  
+      - name: Running benchmarks for flask application in microservices version
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST_DNS }}
+          username: ubuntu
+          port: 22 
+          script:  |
+            docker rm -f $(docker ps -aq); docker system prune --all -f &&\
+             docker-compose -f docker-compose-flask-microservices.yml up --build -d &&\
+              echo Here will be the launch of the tests 
+               echo Here will be the Data Collection 
+                docker rm -f $(docker ps -aq) && docker system prune --all -f 
+                 echo Benchmark for microservices version of flask application completed, system cleared
+
+      - name: Running benchmarks for dotnet application in monolith version
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST_DNS }}
+          username: ubuntu
+          port: 22 
+          script:  |
+            docker rm -f $(docker ps -aq); docker system prune --all -f &&\
+             docker-compose -f docker-compose-dotnet-monolith.yml up --build -d &&\
+              echo Here will be the launch of the tests 
+               echo Here will be the Data Collection 
+                docker rm -f $(docker ps -aq) && docker system prune --all -f 
+                 echo Benchmark for monolith version of dotnet application completed, system cleared
+
+      - name: Running benchmarks for dotnet application in microservices version
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST_DNS }}
+          username: ubuntu
+          port: 22 
+          script:  |
+            docker rm -f $(docker ps -aq); docker system prune --all -f &&\
+             docker-compose -f docker-compose-dotnet-microservices.yml up --build -d &&\
+              echo Here will be the launch of the tests 
+               echo Here will be the Data Collection 
+                docker rm -f $(docker ps -aq) && docker system prune --all -f 
+                 echo Benchmark for microservices version of dotnet application completed, system cleared
+
+      - name: Running benchmarks for spring boot application in monolith version
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST_DNS }}
+          username: ubuntu
+          port: 22 
+          script:  |
+            docker rm -f $(docker ps -aq); docker system prune --all -f &&\
+             docker-compose -f docker-compose-spring-boot-monolith.yml up --build -d &&\
+              echo Here will be the launch of the tests 
+               echo Here will be the Data Collection 
+                docker rm -f $(docker ps -aq) && docker system prune --all -f 
+                 echo Benchmark for monolith version of spring boot application completed, system cleared
+
+      - name: Running benchmarks for spring boot application in microservices version
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST_DNS }}
+          username: ubuntu
+          port: 22 
+          script:  |
+            docker rm -f $(docker ps -aq); docker system prune --all -f &&\
+             docker-compose -f docker-compose-spring-boot-microservices.yml up --build -d &&\
+              echo Here will be the launch of the tests 
+               echo Here will be the Data Collection 
+                docker rm -f $(docker ps -aq) && docker system prune --all -f 
+                 echo Benchmark for microservices version of spring boot application completed, system cleared
